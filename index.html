@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html> 
+  <head>
+    <title>Processing.JS inside Webpages: Template</title> 
+  </head>
+  <body>
+	<!--This draws the canvas on the webpage -->
+    <canvas id="mycanvas"></canvas> 
+  </body>
+ 
+  <!-- Include the processing.js library -->
+  <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+  <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+  <script>
+  var programCode = function(processingInstance) {
+    with (processingInstance) {
+      size(800, 400); 
+      frameRate(30);
+      
+      //================================================================================================
+      // Paste code from Khan Academy here:
+        /**
+         * Program Name: Periodic Table of Elements
+         * Programmer: John Paul Asensi
+         * Details: The program shows all known elements in the Periodic Table of Elements. Click on the Element to know more about the element. In the program, you can view the atomic Weight, Electronegativity, Oxidation States, Density, Period, Group, Type and Electron Configuration of the element.
+         * Note: Feel free to make a spin-off. However, copying any part of the code for another separate program should be done with permission of the programmer 
+         * Sources of Data:
+         * {
+         * https://en.wikipedia.org/wiki/Electron_configurations_of_the_elements_%28data_page%29
+         * http://chemistry.about.com/od/nuclearchemistry/a/List-Of-Radioactive-Elements.htm
+         * http://sciencenotes.org/list-of-electronegativity-values-of-the-elements/
+         * My Periodic Table at HOme :D
+         * 
+         }
+        * 
+        **/
+
+
+
+
+
+
+
+
+        //Just variables
+        var chosen=1;
+        var tilesize=29;
+        var startX=29;
+        var startY=46;
+        var n;
+        var main_showX=172;
+        var main_showY=86;
+        var mpX,mpY;
+        var row_select=46;
+        var column_select=29;
+        var powers=["⁰", "¹", "²", "³" ,"⁴" ,"⁵" ,"⁶", "⁷" ,"⁸" ,"⁹","¹⁰","¹¹","¹²","¹³","¹⁴"];
+        //Element Names
+        {
+        var element_name=[
+            "","Hydrogen", "Helium", "Lithium", "Beryllium", "Boron", "Carbon", "Nitrogen", "Oxygen", "Fluorine", "Neon", "Sodium", "Magnesium", "Aluminium", "Silicon", "Phosphorus", "Sulfur", "Chlorine", "Argon", "Potassium", "Calcium", "Scandium", "Titanium", "Vanadium", "Chromium", "Manganese", "Iron", "Cobalt", "Nickel", "Copper", "Zinc", "Gallium", "Germanium", "Arsenic", "Selenium", "Bromine", "Krypton", "Rubidium", "Strontium", "Yttrium", "Zirconium", "Niobium", "Molybdenum", "Technetium", "Ruthenium", "Rhodium", "Palladium", "Silver", "Cadmium", "Indium", "Tin", "Antimony", "Tellurium", "Iodine", "Xenon", "Caesium", "Barium", "Lanthanum", "Cerium", "Praseodymium", "Neodymium", "Promethium", "Samarium", "Europium", "Gadolinium", "Terbium", "Dysprosium", "Holmium", "Erbium", "Thulium", "Ytterbium", "Lutetium", "Hafnium", "Tantalum", "Tungsten", "Rhenium", "Osmium", "Iridium", "Platinum", "Gold", "Mercury", "Thallium", "Lead", "Bismuth", "Polonium", "Astatine", "Radon", "Francium", "Radium", "Actinium", "Thorium", "Protactinium", "Uranium", "Neptunium", "Plutonium", "Americium", "Curium", "Berkelium", "Californium", "Einsteinium", "Fermium", "Mendelevium", "Nobelium", "Lawrencium", "Rutherfordium", "Dubnium", "Seaborgium", "Bohrium", "Hassium", "Meitnerium", "Darmstadtium", "Roentgenium", "Copernicium", "Nihonium", "Flerovium", "Moscovium", "Livermorium", "Tennessine", "Oganesson"];
+        }
+        //element symbols
+        {
+        var Symbol = ["","H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir", "Pt", "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn", "Fr", "Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr", "Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Nh","Fl","Mc","Lv","Ts","Og"];
+        }
+
+        //Element Types Data
+        {
+        /*
+        1-Non Metal
+        2-Alkali Metals
+        3-Alkaline Earth Metals
+        4-Noble Gases
+        5-Metalloids
+        6-Halogens
+        7-Transition Metals
+        8-Post-transition metals
+        9-Lanthanoids
+        10-Actinoids 
+        */
+        var Type_name=["","Non-Metal","Alkali Metals","Alkaline Earth Metals","Noble Gases","Metalloids","Halogens","Transition Metals","Post-Transition Metals","Lanthanoids","Actinoids"];
+
+
+        var Type=["",1,4,2,3,5,1,1,1,6,4,2,3,8,5,1,1,6,4,2,3,7,7,7,7,7,7,7,7,7,7,8,5,5,1,6,4,2,3,7,7,7,7,7,7,7,7,7,7,8,8,5,5,6,4,2,3,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,7,7,7,7,7,7,7,7,7, 8,8,8, 5, 6, 4, 2, 3,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,7,7,7,7,7,7,7,7,7,8,8,8,8,6,4];
+
+        var Type_color=["",color(122, 209, 109),color(237, 160, 83),color(230, 207, 60),color(153, 161, 247),color(38, 201, 160),color(66, 197, 204),color(250, 144, 130),color(166, 166, 166),color(240, 113, 229),color(209, 72, 224)];
+        }
+
+        //atomic weight data
+        {
+        var atomicweight = ["","1.00794","4.002602","6.941","9.012182","10.811","12.0107","14.0067","15.9994","18.9984032","20.1797","22.98976928","24.3050","26.981536","28.0855","30.973762","32.065","35.453","39.948","39.0983","40.078","44.955912","47.867","50.9415","51.9961","54.938045","55.845","58.933195","58.6934","63.546","65.38","69.723","72.64","74.92160","78.96","79.904","83.798","85.4678","87.62","88.90585","91.224","92.90638","95.96","97.9072*","101.07","102.90550","106.42","107.8682","112.411","114.818","118.710","121.760","127.60","126.90447","131.293","132.9054519","137.327","138.90547","140.116","140.90765","144.242","145*","150.36","151.964","157.25","158.92535","162.5","164.93032","167.259","168.93421","173.054","174.9668","178.49","180.94788","183.84","186.207","190.23","192.217","195.084","196.966569","200.59","204.3833","207.2","208.98040","208.9824*","209.9871*","222.0176*","223*","226*","227*","232.03806","231.03588","238.02891","237*","244*","243*","247*","247*","251*","252*","257*","258*","259*","262*","261*","262*","266*","264*","277*","268*","271*","272*","285*","284*","289*","288*","292*","294*","294*"];
+        }
+        //Oxidation States data
+        {
+        var oxidation_state=["","±1","0","+1","+2","+3","±4,+2","+1,+2,±3,+4,+5","±2,-0.5,-1","-1","0","+1","+2","+3","±4","±3,+5","±2,+4,+6","±1,+3,+4,+5,+6,+7","0","+1","+2","+3","+2,+3,+4","+2,+3,+4,+5","+2,+3,+4,+5,+6","+2,+3,+4,+5,+6,+7","+2,+3","+2,+3","+2","+1,+2","+2","+3","±4","±3,+5","-2,+4,+6","±1,+3,+5","+2,+4","+1","+2","+3","+4","+4,+5","+3,+4,+6","+4,+6,+7","+3,+4,+6,+8","+2,+3,+4","+2,+4","+1","+2","+3","+2,+4","±3,+5","-2,+4,+6","±1,+5,+7","+2,+4,+6","+1","+2","+3","+3,+4","+3","+3","+3","+2,+3","+2,+3","+3","+3","+3","+3","+3","+3","+2,+3","+3","+4","+5","+4,+6","+4,+6,+7","+4,+8","+3,+4", "+2,+4", "+1,+3", "+1,+2", "+1,+3", "+2,+4", "+3,+5", "+2", "-1", "0", "+1", "+2","+3","+4","+4,+5","+3,+4,+5,+6","+3,+4,+5,6","+3,+4,+5,+6","+3,+4,+5,6","+3","+3,+4","+3","+3","+3","+2,+3","+2,+3","+3", "+4","-","-","-","-","-","-","-","-","-","-","-","-","-","-"];
+        }
+        //electronegativity data
+        {
+        var electronegativity=["","2.20","no data","0.98","1.57","2.04","2.55","3.04","3.44","3.98","no data","0.93","1.31","1.61","1.90","2.19","2.58","3.16","no data","0.82","1.00","1.36","1.54","1.63","1.66","1.55","1.83","1.88","1.91","1.90","1.65","1.81","2.01","2.18","2.55","2.96","3.00","0.82","0.95","1.22","1.33","1.6","2.16","1.9","2.2","2.28","2.20","1.93","1.69","1.78","1.96","2.05","2.1","2.66","2.6","0.79","0.89","1.10","1.12","1.13","1.14","1.13","1.17","1.2","1.2","1.22","1.23","1.24","1.24","1.25","1.1","1.27","1.3","1.5","2.36","1.9","2.2","2.2", "2.28", "2.54", "2.00", "1.62", "2.33", "2.02", "2.0", "2.2", "no data", "0.7", "0.89","1.1","1.3","1.5","1.38","1.36","1.28","1.3","1.3","1.3","1.3","1.3","1.3","1.3","1.3","no data", "no data","no data","no data","no data","no data","no data","no data","no data","no data","no data","no data","no data","no data","no data","no data"];
+        }
+        //density data
+        {
+        var density=["","0.089","0.124","0.534","1.85","2.35","3.52","1.25","1.429","1.696","1.204","0.972","1.74","2.70","2.24","1.83","2.07","3.214","1.65","759.9","1.55","2.98","4.51","6.10","7.14","7.3","7.87","8.9","8.8","8.94","7.1","5.9","5.36","5.72","4.82","3.12","3.4","1.53","2.6","4.457","6.4","8.66","9.01","--","12.1","12.450","12.16","10.49","8.65","7.31","7.2","6.62","6.24","4.94","3.05","1.87","3.5","6.16","6.77","6.77","7.00","7.22","7.54","5.24","7.89","8.25","8.56","8.78","9.04","9.32","6.97","9.84","13.1","16.63","19.3","21.04","22.5","22.65", "21.37", "19.32", "13.55", "11.85", "11.4", "9.78", "9.4", "--", "9.72", "2.4", "5","--","11.0","--","19.05","--","--","--","--","--","--","--","--","--","--","--", "--","--","--","--","--","--","--","--","--","--","--","--","--","--","--"];
+        }
+        //Group and Period Data
+        {
+        var Period = ["","1","1","2","2","2","2","2","2","2","2","3","3","3","3","3","3","3","3","4","4","4","4","4","4","4","4","4","4","4","4","4","4","4","4","4","4","5","5","5","5","5","5","5","5","5","5","5","5","5","5","5","5","5","5","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","6","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7","7"];
+
+        var Group = ["","1A","8A","1A","2A","3A","4A","5A","6A","7A","8A","1A","2A","3A","4A","5A","6A","7A","8A","1A","2A","1B","2B","3B","4B","5B","6B","7B","8B","9B","10B","3A","4A","5A","6A","7A","8A","1A","2A","1B","2B","3B","4B","5B","6B","7B","8B","9B","10B","3A","4A","5A","6A","7A","8A","1A", "2A","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","2B","3B","4B","5B","6B","7B","8B","9B","10B","3A","4A","5A","6A","7A","8A","1A", "2A","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","1B","2B","3B","4B","5B","6B","7B","8B","9B","10B","3A","4A","5A","6A","7A","8A"];}
+        //radioactivity data
+        {
+        var radioactivity = ["",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];}
+        //data names
+        {
+        var data_name=["","Atomic Weight","Electronegativity","Oxidation States","Density(g/cm³)","Period","Group","Type"];
+        }
+
+
+
+
+        var electron_config=function(a){
+            
+            //a-atomic number
+            if(a<=2){
+                return("1s"+powers[a]);
+            } else if (a<=4){
+                return("1s² 2s"+powers[a-2]);
+            } else if (a<=10){
+                return("1s² 2s² 2p"+powers[a-4]);
+            } else if (a<=12){
+                return("(Ne)3s"+powers[a-10]);
+            } else if (a<=18){
+                return("(Ne)3s² 3p"+powers[a-12]);
+            } else if (a<=20){
+                return("(Ar)4s"+powers[a-18]);
+            } else if (a<=30){
+                if(a===24||a===25){
+                    return("(Ar)3d⁵ 4s"+powers[a-23]); 
+                } else if (a===29||a===30){
+                    return("(Ar)3d¹⁰ 4s"+powers[a-28]); 
+                } else {
+                    return("(Ar)3d"+powers[a-20]+" 4s²");   
+                }
+            } else if (a<=36){
+                return("(Ar)3d¹⁰ 4s² 4p"+powers[a-30]);
+            } else if (a<=38){
+                return("(Kr)5s"+powers[a-36]);
+            } else if (a<=45){
+                if(a===41||a===42){
+                    return("(Kr)4d"+powers[a-37]+" 5s¹"); 
+                } else if (a===44||a===45){
+                    return("(Kr)4d"+powers[a-37]+" 5s¹"); 
+                } else {
+                    return("(Kr)4d"+powers[a-38]+" 5s²");   
+                }
+            } else if (a<=48){
+                return("(Kr)4d¹⁰ 5s"+powers[a-46]);
+            } else if (a<=54){
+                return("(Kr)4d¹⁰ 5s² 5p"+powers[a-48]);
+            } else if (a<=56){
+                return("(Xe)6s"+powers[a-54]);
+            } else if (a<=70){
+                if(a===57||a===58){
+                    return("(Xe)4f"+powers[a-57]+" 5d¹ 6s²");
+                } else if (a===64){
+                    return("(Xe)4f⁷ 5d¹ 6s²");
+                } else {
+                    return("(Xe)4f"+powers[a-56]+" 6s²");
+                }
+            }  else if (a<=80){
+                if(a===78||a===79){
+                    return("(Xe)4f¹⁴ 5d"+powers[a-69]+" 6s¹");
+                } else {
+                    return("(Xe)4f¹⁴ 5d"+powers[a-70]+" 6s²");   
+                }
+            }  else if (a<=86){
+                return("(Xe)4f¹⁴ 5d¹⁰ 6s² 6p"+powers[a-80]);
+            }  else if (a<=88){
+                return("(Rn)7s"+powers[a-86]);
+            }  else if (a<=90){
+                return("(Rn)6d"+powers[a-88]+" 7s²");
+            }  else if (a<=102){
+                if(a<=93){
+                    return("(Rn)5f"+powers[a-89]+" 6d¹ 7s²");
+                } else if(a<=95){
+                    return("(Rn)5f"+powers[a-88]+" 7s²");
+                } else if(a===96){
+                    return("(Rn)5f⁷ 6d¹ 7s²");
+                } else {
+                    return("(Rn)5f"+powers[a-88]+" 7s²");
+                }
+            } else if (a<=112){
+                if(a===103){
+                    return("(Rn)5f¹⁴ 7s² 7p¹");
+                } else {
+                    return("(Rn)5f¹⁴ 6d"+powers[a-102]+" 7s²");
+                }
+            } else {
+                return("(Rn)5f¹⁴ 6d¹⁰ 7s² 7p"+powers[a-112]);
+            } 
+        };
+
+        var textandnum=function(a,b){
+            fill(0, 0, 0);
+            textSize(15);
+            text(Symbol[n],a,b);
+            textSize(8);
+            text(n,a+7,b-13);
+        };
+
+        var mousecontrol=function(){
+            mouseClicked=function(){
+                mpX=mouseX;mpY=mouseY;
+            };
+            if(mpY>29&&mpY<29+(tilesize+5)){
+                if(mpX>15&&mpX<(tilesize+15)){
+                    chosen=1;
+                    row_select=46;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                } else if (mpX>559&&mpX<(tilesize+559)){
+                    chosen=2;
+                    row_select=46;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                }
+            } else if(mpY>67&&mpY<67+(tilesize+5)){
+                if(mpX>15&&mpX<(tilesize+15)){
+                    chosen=3;
+                    row_select=84;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                } else if (mpX>47&&mpX<(tilesize+47)){
+                    chosen=4;
+                    row_select=84;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                } else if (mpX>399&&mpX<559+(tilesize)){
+                    chosen=5+floor((mpX-399)/32);
+                    row_select=84;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                }
+            } else if(mpY>105&&mpY<105+(tilesize+5)){
+                if(mpX>15&&mpX<(tilesize+15)){
+                    chosen=11;
+                    row_select=122;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                } else if (mpX>47&&mpX<(tilesize+47)){
+                    chosen=12;
+                    row_select=122;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                } else if (mpX>399&&mpX<559+(tilesize)){
+                    chosen=13+floor((mpX-399)/32);
+                    row_select=122;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                }
+            } else if(mpY>143&&mpY<143+(tilesize+5)){
+                chosen=19+floor((mpX-15)/32);
+                row_select=160;
+                column_select=(floor((mpX-15)/32))*32+29;
+            } else if(mpY>181&&mpY<181+(tilesize+5)){
+                chosen=37+floor((mpX-15)/32);
+                row_select=198;
+                column_select=(floor((mpX-15)/32))*32+29;
+            } else if(mpY>219&&mpY<219+(tilesize+5)){
+                if(mpX>15&&mpX<(15+(2*32))){
+                    chosen=55+floor((mpX-15)/32);
+                    row_select=236;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                } else if (mpX>111&&mpX<(559+tilesize)){
+                    chosen=69+floor((mpX-15)/32);
+                    row_select=236;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                }
+            } else if(mpY>257&&mpY<257+(tilesize+5)){
+                if(mpX>15&&mpX<(15+(2*32))){
+                    chosen=87+floor((mpX-15)/32);
+                    row_select=274;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                } else if (mpX>111&&mpX<(559+tilesize)){
+                    chosen=101+floor((mpX-15)/32);
+                    row_select=274;
+                    column_select=(floor((mpX-15)/32))*32+29;
+                }
+            } else if(mpY>311&&mpY<311+(tilesize+5)){
+                if(mpX>111&&mpX<(559+tilesize)){
+                    chosen=54+floor((mpX-15)/32);
+                    row_select=236;
+                    column_select=93;
+                }
+            } else if(mpY>349&&mpY<349+(tilesize+5)){
+                if(mpX>111&&mpX<(559+tilesize)){
+                    chosen=86+floor((mpX-15)/32);
+                    row_select=274;
+                    column_select=93;
+                }
+            }
+            //mouse hover
+            {
+                
+            }
+            mpX=0;mpY=0;
+        };
+
+        var radioactive_symbol=function(a){
+            var pointX=181,pointY=44;
+        if(radioactivity[a]===1){
+            stroke(0, 0, 0);
+            strokeWeight(18);
+            point(pointX,pointY);
+            stroke(217, 188, 26);
+            strokeWeight(16);
+            point(pointX,pointY);
+            noStroke();
+            fill(0, 0, 0);
+            arc(pointX,pointY,14,14,300,360);
+            arc(pointX,pointY,14,14,180,240);
+            arc(pointX,pointY,14,14,60,120);
+            stroke(217, 188, 26);
+            strokeWeight(5);
+            point(pointX,pointY);
+            stroke(0, 0, 0);
+            strokeWeight(3);
+            point(pointX,pointY);
+        }
+        };
+
+        rectMode(CENTER);
+        draw= function() {
+            
+            noStroke();
+            mousecontrol();
+            background(209, 209, 209);
+            textAlign(CENTER,CENTER);
+            textFont(createFont("Trebuchet MS"));
+            //row and column selection
+            {
+            fill(46, 46, 46,50);
+            rect(6.5,row_select,10,34);
+            rect(column_select,18,tilesize+5,11);
+            }
+            
+            //element selection box
+            {
+            fill(15, 15, 15);
+            if(chosen>=57&&chosen<=71){
+                rect(column_select,row_select,tilesize+2,tilesize+7);
+                rect(startX+(32*(chosen-54)),startY+(7*38)+16,tilesize+2,tilesize+7);
+            } else if ((chosen>=89&&chosen<=103)){
+                rect(column_select,row_select,tilesize+2,tilesize+7);
+                rect(startX+(32*(chosen-86)),startY+(8*38)+16,tilesize+2,tilesize+7);
+            }else {
+                rect(column_select,row_select,tilesize+2,tilesize+7);   
+            }
+            }
+            //each square is drawn
+            {
+            fill(0, 0, 0);
+            textSize(10);
+            for(var y=0;y<=17;y++){
+                if(y<=1){
+                    text((y+1)+"A",startX+(32*y),17);
+                } else if (y<=11){
+                    text((y-1)+"B",startX+(32*y),17);
+                }  else {
+                    text((y-9)+"A",startX+(32*y),17);
+                }
+                if(y<=6){
+                    text(y+1,6,startY+(y*38));    
+                }
+            }
+            //column 1
+            n=1;
+            for(var x=0;x<=6;x++){
+                for(var y=0;y<=0;y++){
+                    fill(Type_color[Type[n]]);
+                    rect(startX+(32*y),startY+(x*38),tilesize,tilesize+5,5);
+                    textandnum(startX+(32*y),startY+(x*38)+3);
+                }
+                if(n<3){
+                    n+=2;
+                } else if (n<19){
+                    n+=8;
+                } else if (n<55){
+                    n+=18;
+                } else if (n<87){
+                    n+=32;
+                }
+            }
+            //column 2
+            n=4;
+            for(var x=1;x<=6;x++){
+                for(var y=1;y<=1;y++){
+                    fill(Type_color[Type[n]]);
+                    rect(startX+(32*y),startY+(x*38),tilesize,tilesize+5,5);
+                    textandnum(startX+(32*y),startY+(x*38)+3);
+                }
+                if(n<20){
+                    n+=8;
+                } else if (n<56){
+                    n+=18;
+                } else if (n<88){
+                    n+=32;
+                } 
+            }
+            //column 3
+            n=21;
+            for(var x=3;x<=4;x++){
+                for(var y=2;y<=2;y++){
+                    fill(Type_color[Type[n]]);
+                    rect(startX+(32*y),startY+(x*38),tilesize,tilesize+5,5);
+                    textandnum(startX+(32*y),startY+(x*38)+3);
+                }
+                n+=18;
+            }
+            //column 4-12
+            for(var x=3;x<=6;x++){
+                if(x===3){
+                    n=22;
+                } else if(x===4){
+                    n=40;
+                } else if (x===5){
+                    n=72;
+                } else if (x===6){
+                    n=104;
+                }
+                for(var y=3;y<=11;y++){
+                    fill(Type_color[Type[n]]);
+                    rect(startX+(32*y),startY+(x*38),tilesize,tilesize+5,5);
+                    textandnum(startX+(32*y),startY+(x*38)+3);
+                    n++;
+                }
+            }
+            //column 13-17
+            for(var x=1;x<=6;x++){
+                if(x===1){
+                    n=5;
+                } else if(x===2){
+                    n=13;
+                } else if (x===3){
+                    n=31;
+                } else if (x===4){
+                    n=49;
+                } else if (x===5){
+                    n=81;
+                } else if (x===6){
+                    n=113;
+                }
+                for(var y=12;y<=16;y++){
+                    fill(Type_color[Type[n]]);
+                    rect(startX+(32*y),startY+(x*38),tilesize,tilesize+5,5);
+                    textandnum(startX+(32*y),startY+(x*38)+3);
+                    n++;
+                }
+            }
+            //column 18
+            n=2;
+            for(var x=0;x<=6;x++){
+                for(var y=17;y<=17;y++){
+                    fill(Type_color[Type[n]]);
+                    rect(startX+(32*y),startY+(x*38),tilesize,tilesize+5,5);             textandnum(startX+(32*y),startY+(x*38)+3);
+                }
+                if(n<18){
+                    n+=8;
+                } else if (n<54){
+                    n+=18;
+                } else if (n<118){
+                    n+=32;
+                }
+            }
+            
+            //Lanthanoids and Actinoids
+            for(var x=7;x<=8;x++){
+                if(x===7){
+                    n=57;
+                } else if(x===8){
+                    n=89;
+                }
+                for(var y=3;y<=17;y++){
+                    fill(Type_color[Type[n]]);
+                    rect(startX+(32*y),startY+(x*38)+16,tilesize,tilesize+5,5); 
+                    textandnum(startX+(32*y),startY+(x*38)+23);
+                    n++;
+                }
+            }
+            
+            
+            fill(Type_color[9]);
+            rect(startX+(32*2),startY+(5*38),tilesize,tilesize+5,5);
+            fill(Type_color[10]);
+            rect(startX+(32*2),startY+(6*38),tilesize,tilesize+5,5);
+            fill(0, 0, 0);
+            textSize(10);
+            text("La-Lu",startX+(32*2),startY+(5*38)+3);
+            text("Ac-Lr",startX+(32*2),startY+(6*38)+3);
+            textSize(8);
+            text("57-71",startX+(32*2)+1,startY+(5*38)-7);
+            text("89-103",startX+(32*2)+1,startY+(6*38)-7);
+        }
+            //element type legend
+            for(var x=1;x<=10;x++){
+                fill(Type_color[x]);
+                rect(8,294+(x*10),7,7);
+                textSize(8.5);
+                fill(0, 0, 0);
+                textAlign(LEFT,CENTER);
+                text(Type_name[x],15,294+(x*10));
+            }
+            
+            //element chosen data
+            {
+            strokeWeight(3);
+            fill(Type_color[Type[chosen]]);
+            stroke(92, 92, 92);
+            rect(205,85,152,106,3);
+            fill(0, 0, 0);
+            textAlign(RIGHT,CENTER);
+            textSize(10.5);
+            
+            //atomic weight
+            text(atomicweight[chosen],main_showX+104,main_showY-42);
+            //electronegativity
+            text(electronegativity[chosen],main_showX+104,main_showY-28);
+            //density
+            text(density[chosen],main_showX+104,main_showY+0);
+            //Period and Group
+            text(Period[chosen],main_showX+104,main_showY+13);
+            text(Group[chosen],main_showX+104,main_showY+28);
+            //oxidation state
+            textSize(9);
+            text(oxidation_state[chosen],main_showX+104,main_showY+-14);
+            textAlign(LEFT,CENTER);
+            
+            //element symbol
+            textSize(37);
+            text(Symbol[chosen],main_showX-32,main_showY-17);
+            //atomic number
+            textSize(17);
+            text(chosen,main_showX-40,main_showY-42);
+            //type
+            textSize(11);
+            text(Type_name[Type[chosen]],main_showX+-36,main_showY+43);
+            
+            //element name
+            textSize(12);
+            text(element_name[chosen],main_showX-34,main_showY+12);
+            
+            //electron configuration
+            textSize(11);
+            text(electron_config(chosen),main_showX-37,main_showY+28);
+            
+            radioactive_symbol(chosen);
+            }
+            
+            textSize(10);
+            textAlign(LEFT,CENTER);
+            //data names
+            for(var x=1;x<=6;x++){
+                text(data_name[x],main_showX+113,29+(x*14));
+            }
+            
+            text("* - For elements with no Stable isotopes, the mass number of the isotope with the longest half-life is shown",109,301);
+        };
+
+
+
+
+      //================================================================================================
+    }};
+
+  // Get the canvas that ProcessingJS will use
+  var canvas = document.getElementById("mycanvas"); 
+  // Pass the function to ProcessingJS constructor
+  var processingInstance = new Processing(canvas, programCode); 
+  </script>
+</html>
