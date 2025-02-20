@@ -14,7 +14,8 @@
   <script>
   var programCode = function(processingInstance) {
     with (processingInstance) {
-      size(800, 400); 
+      size(1600, 800); 
+      scale(2);
       frameRate(30);
       
       //================================================================================================
@@ -210,7 +211,7 @@
 
         var mousecontrol=function(){
             mouseClicked=function(){
-                mpX=mouseX;mpY=mouseY;
+                mpX=mouseX/2;mpY=mouseY/2;
             };
             if(mpY>29&&mpY<29+(tilesize+5)){
                 if(mpX>15&&mpX<(tilesize+15)){
